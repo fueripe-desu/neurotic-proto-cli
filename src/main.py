@@ -1,5 +1,6 @@
+import argparse
 from pathlib import Path
-import sqlite3
+import sqlite3, argparse
 
 DATA_DIR_NAME: str = "data"
 
@@ -15,7 +16,16 @@ def create_dir(path: Path, dir_name: str):
         print(f"An error occurred: {e}")
 
 def main():
-    print("Starting database connection...")
+    parser = argparse.ArgumentParser(description="Neurotic CLI (Prototype)")
+    parser.add_argument("--bebel", action="store_true", help="Shows the my beloved wife's secret message")
+
+    args = parser.parse_args()
+
+    if args.bebel:
+        print("My beloved wife's message <3...")
+        print("\"Banana\"")
+
+    #print("Starting database connection...")
 
     cwd: Path = Path.cwd()
     data_dir: Path = cwd / DATA_DIR_NAME
