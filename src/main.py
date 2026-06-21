@@ -1,6 +1,6 @@
-import argparse
+from sys import exit
 from pathlib import Path
-import sqlite3, argparse
+import sqlite3, argparse, os
 
 DATA_DIR_NAME: str = "data"
 
@@ -24,7 +24,7 @@ def main():
     if args.bebel:
         print("My beloved wife's message <3...")
         print("\"Banana\"")
-        return
+        exit()
 
     print("Starting database connection...")
 
@@ -35,6 +35,20 @@ def main():
         create_dir(cwd, DATA_DIR_NAME)
 
     con: sqlite3.Connection = sqlite3.connect("data/neurotic_cli.db")
+
+    while True:
+        prompt_value = input("$: ")
+
+        match prompt_value:
+            case "clear":
+                os.system("clear")
+            case "quit":
+                break
+            case _:
+                print(f"[Error]: Unknown '{prompt_value}' commmand.")
+
+        if (prompt_value == "quit"):
+            break
 
 if __name__ == "__main__":
     main()
