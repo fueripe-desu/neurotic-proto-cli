@@ -17,15 +17,16 @@ def create_dir(path: Path, dir_name: str):
 
 def main():
     parser = argparse.ArgumentParser(description="Neurotic CLI (Prototype)")
-    parser.add_argument("--bebel", action="store_true", help="Shows the my beloved wife's secret message")
+    parser.add_argument("--bebel", action="store_true", help="Shows my beloved wife's secret message")
 
     args = parser.parse_args()
 
     if args.bebel:
         print("My beloved wife's message <3...")
         print("\"Banana\"")
+        return
 
-    #print("Starting database connection...")
+    print("Starting database connection...")
 
     cwd: Path = Path.cwd()
     data_dir: Path = cwd / DATA_DIR_NAME
