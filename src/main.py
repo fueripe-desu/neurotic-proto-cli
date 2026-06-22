@@ -1,15 +1,17 @@
 from sys import exit
 from pathlib import Path
-import sqlite3, argparse
+import sqlite3
+import argparse
 from neurotic.logger import Logger
 from neurotic.engine import Engine
 from neurotic.prompt import Prompt
 
 DATA_DIR_NAME: str = "data"
 
+
 def create_dir(path: Path, dir_name: str):
     try:
-        final_path: Path = path / dir_name;
+        final_path: Path = path / dir_name
         final_path.mkdir()
     except FileExistsError:
         print(f"Directory '{dir_name}' already exists.")
@@ -18,9 +20,15 @@ def create_dir(path: Path, dir_name: str):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
 def main():
+    logger = Logger()
+    logger.configure_console()
+
     parser = argparse.ArgumentParser(description="Neurotic CLI (Prototype)")
-    parser.add_argument("--bebel", action="store_true", help="Shows my beloved wife's secret message")
+    _ = parser.add_argument(
+        "--bebel", action="store_true", help="Shows my beloved wife's secret message"
+    )
 
     args = parser.parse_args()
 
@@ -30,11 +38,11 @@ def main():
     if not data_dir.exists():
         create_dir(cwd, DATA_DIR_NAME)
 
-    logger = Logger(data_dir, "neurotic_cli.log")
+    logger.configure_file(data_dir, "neurotic_cli.log")
 
-    if args.bebel:
+    if args.bebel:  # pyright: ignore[reportAny]
         print("My beloved wife's message <3...")
-        print("\"Banana\"")
+        print('"Banana"')
         exit()
 
     logger.debug("Starting database connection...")
@@ -44,6 +52,6 @@ def main():
     engine = Engine(prompt=Prompt(), logger=logger)
     engine.run()
 
+
 if __name__ == "__main__":
     main()
-

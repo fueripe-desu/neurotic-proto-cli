@@ -1,29 +1,37 @@
+import logging
+import sys
 from pathlib import Path
-import sys, logging
+
 
 class Logger:
-    def __init__(self, path: Path, filename: str):
-        self.__file_logger = logging.getLogger("neurotic.file_logger")
-        self.__console_logger = logging.getLogger("neurotic.console_logger")
+    FILE_LOGGER_NAME: str = "neurotic.file_logger"
+    CONSOLE_LOGGER_NAME: str = "neurotic.console_logger"
 
-        self.__file_logger.setLevel(logging.DEBUG)
-        self.__console_logger.setLevel(logging.DEBUG)
+    def __init__(self):
+        self.__file_logger = logging.getLogger(self.FILE_LOGGER_NAME)
+        self.__console_logger = logging.getLogger(self.CONSOLE_LOGGER_NAME)
 
-        fileHandler = logging.FileHandler(path / filename)
-        fileHandler.setFormatter(logging.Formatter(
-            fmt= "%(asctime)s [%(levelname)s]: %(message)s"
-        ))
-
-        self.__file_logger.addHandler(fileHandler)
-
-        console_formatter = logging.Formatter(
-            fmt= "[%(levelname)s]: %(message)s"
-        )
-
+    def configure_console(
+        self, level: int = logging.DEBUG, fmt: str = "[%(levelname)s]: %(message)s"
+    ) -> None:
+        self.__console_logger.setLevel(level)
         consoleHandler = logging.StreamHandler(sys.stdout)
-        consoleHandler.setFormatter(console_formatter)
+        consoleHandler.setFormatter(logging.Formatter(fmt))
 
         self.__console_logger.addHandler(consoleHandler)
+
+    def configure_file(
+        self,
+        path: Path,
+        filename: str,
+        level: int = logging.DEBUG,
+        fmt: str = "%(asctime)s [%(levelname)s]: %(message)s",
+    ) -> None:
+        self.__file_logger.setLevel(level)
+        fileHandler = logging.FileHandler(path / filename)
+        fileHandler.setFormatter(logging.Formatter(fmt))
+
+        self.__file_logger.addHandler(fileHandler)
 
     def debug(self, msg: str) -> None:
         self.__file_logger.debug(msg)
@@ -44,4 +52,3 @@ class Logger:
     def critical(self, msg: object) -> None:
         self.__file_logger.critical(msg)
         self.__console_logger.critical(msg)
-
