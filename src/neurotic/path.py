@@ -10,16 +10,16 @@ class Path:
         self.__cwd: pathlib.Path = pathlib.Path.cwd()
         self.__data_dir: pathlib.Path = self.__cwd / self.DATA_DIR_NAME
 
-        self.cwd: str = self.__cwd.name
-        self.data_dir: str = self.__data_dir.name
+        self.cwd: str = str(self.__cwd)
+        self.data_dir: str = str(self.__data_dir)
 
         self.__create_dir(self.__data_dir, self.__logger)
 
-    def append_cwd(self, name: str):
-        return (self.__cwd / name).name
+    def append_cwd(self, name: str) -> str:
+        return str(self.__cwd / name)
 
-    def append_data_dir(self, name: str):
-        return (self.__data_dir / name).name
+    def append_data_dir(self, name: str) -> str:
+        return str(self.__data_dir / name)
 
     def __create_dir(self, path: pathlib.Path, logger: Logger):
         if not path.exists():
