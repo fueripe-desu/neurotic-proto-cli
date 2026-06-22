@@ -15,18 +15,44 @@ def create_dir(path: Path, dir_name: str):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+class Prompt:
+    prompt_prefix: str = "$:"
+
+    def __init__(self, prompt_prefix=None):
+        if prompt_prefix is not None:
+            self.prompt_prefix = prompt_prefix
+
+    def get_prompt(self) -> str:
+        return input(f"{self.prompt_prefix} ")
+
+class Engine:
+    def __init__(self, prompt: Prompt):
+        self.__prompt = prompt
+        self.__should_close = False
+
+    def close(self) -> None:
+        self.__should_close = True
+
+    def run(self):
+        while not self.__should_close:
+            prompt_value: str = self.__prompt.get_prompt()
+
+            match prompt_value:
+                case "clear":
+                    os.system("clear")
+                case "quit":
+                    break
+                case _:
+                    print(f"[Error]: Unknown '{prompt_value}' commmand.")
+
+            if (prompt_value == "quit"):
+                break
+
 def main():
     parser = argparse.ArgumentParser(description="Neurotic CLI (Prototype)")
     parser.add_argument("--bebel", action="store_true", help="Shows my beloved wife's secret message")
 
     args = parser.parse_args()
-
-    if args.bebel:
-        print("My beloved wife's message <3...")
-        print("\"Banana\"")
-        exit()
-
-    print("Starting database connection...")
 
     cwd: Path = Path.cwd()
     data_dir: Path = cwd / DATA_DIR_NAME
@@ -34,21 +60,15 @@ def main():
     if not data_dir.exists():
         create_dir(cwd, DATA_DIR_NAME)
 
-    con: sqlite3.Connection = sqlite3.connect("data/neurotic_cli.db")
+    if args.bebel:
+        print("My beloved wife's message <3...")
+        print("\"Banana\"")
+        exit()
 
-    while True:
-        prompt_value = input("$: ")
+    con: sqlite3.Connection = sqlite3.connect(f"{DATA_DIR_NAME}/neurotic_cli.db")
 
-        match prompt_value:
-            case "clear":
-                os.system("clear")
-            case "quit":
-                break
-            case _:
-                print(f"[Error]: Unknown '{prompt_value}' commmand.")
-
-        if (prompt_value == "quit"):
-            break
+    engine = Engine(prompt=Prompt())
+    engine.run()
 
 if __name__ == "__main__":
     main()
