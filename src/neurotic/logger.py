@@ -1,6 +1,5 @@
 import logging
 import sys
-from pathlib import Path
 
 
 class Logger:
@@ -26,13 +25,12 @@ class Logger:
 
     def configure_file(
         self,
-        path: Path,
-        filename: str,
+        path: str,
         level: int = logging.DEBUG,
         fmt: str = "%(asctime)s [%(levelname)s]: %(message)s",
     ) -> None:
         self.__file_logger.setLevel(level)
-        fileHandler = logging.FileHandler(path / filename)
+        fileHandler = logging.FileHandler(path)
         fileHandler.setFormatter(logging.Formatter(fmt))
 
         self.__file_logger.addHandler(fileHandler)
