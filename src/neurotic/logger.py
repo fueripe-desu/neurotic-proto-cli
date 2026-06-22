@@ -1,3 +1,5 @@
+from neurotic.path import Path
+
 import logging
 import sys
 
@@ -6,14 +8,17 @@ class Logger:
     FILE_LOGGER_NAME: str = "neurotic.file_logger"
     CONSOLE_LOGGER_NAME: str = "neurotic.console_logger"
 
-    def __init__(self):
+    def __init__(self, path: Path, filename: str):
         self.__file_logger = logging.getLogger(self.FILE_LOGGER_NAME)
         self.__console_logger = logging.getLogger(self.CONSOLE_LOGGER_NAME)
 
         self.__console_initialized = False
         self.__file_initialized = False
 
-    def configure_console(
+        self.__configure_console()
+        self.__configure_file(path, filename)
+
+    def __configure_console(
         self, level: int = logging.DEBUG, fmt: str = "[%(levelname)s]: %(message)s"
     ) -> None:
         self.__console_logger.setLevel(level)
@@ -23,14 +28,15 @@ class Logger:
         self.__console_logger.addHandler(consoleHandler)
         self.__console_initialized = True
 
-    def configure_file(
+    def __configure_file(
         self,
-        path: str,
+        path: Path,
+        filename: str,
         level: int = logging.DEBUG,
         fmt: str = "%(asctime)s [%(levelname)s]: %(message)s",
     ) -> None:
         self.__file_logger.setLevel(level)
-        fileHandler = logging.FileHandler(path)
+        fileHandler = logging.FileHandler(filename=path.append_data_dir(filename))
         fileHandler.setFormatter(logging.Formatter(fmt))
 
         self.__file_logger.addHandler(fileHandler)

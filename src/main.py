@@ -8,10 +8,8 @@ from neurotic.path import Path
 
 
 def main():
-    logger = Logger()
-    logger.configure_console()
-
-    path = Path(logger=logger)
+    path = Path()
+    logger = Logger(path, "neurotic_cli.log")
 
     parser = argparse.ArgumentParser(description="Neurotic CLI (Prototype)")
     _ = parser.add_argument(
@@ -19,9 +17,6 @@ def main():
     )
 
     args = parser.parse_args()
-
-    logger_file_path = path.append_data_dir("neurotic_cli.log")
-    logger.configure_file(logger_file_path)
 
     if args.bebel:  # pyright: ignore[reportAny]
         print("My beloved wife's message <3...")
