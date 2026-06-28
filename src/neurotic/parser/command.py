@@ -28,13 +28,24 @@ class Command:
         for c in splitted[1:]:
             if c.startswith("--"):
                 if len(self.cmds) == 0:
-                    self.__setError("Command must not start with an argument.")
-                    return
-                self.cmds.append(CommandArgument(value=c))
+                    return self.__setError("Command must not start with an argument.")
+
+                cmd_arg: CommandArgument = CommandArgument(value=c)
+
+                if cmd_arg.hasError():
+                    return self.__setError(cmd_arg.error_msg)
+
+                self.cmds.append(cmd_arg)
             else:
                 if len(self.cmds) > 0 and type(self.cmds[-1]) is CommandArgument:
-                    self.__setError("Sub command is not allowed after an argument.")
-                    return
+                    return self.__setError(
+                        "Sub command is not allowed after an argument."
+                    )
+
+                sub_cmd: SubCommand = SubCommand(value=c)
+
+                if sub_cmd.hasError():
+                    return self.__setError(sub_cmd.error_msg)
 
                 self.cmds.append(SubCommand(value=c))
 
