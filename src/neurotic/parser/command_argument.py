@@ -1,5 +1,6 @@
 from enum import Enum
 import re
+from typing import override
 
 from neurotic.parser.command_validator import CommandValidator
 
@@ -59,3 +60,14 @@ class CommandArgument(CommandValidator):
             return self.setError(
                 "Argument key must not start with more than two dashes."
             )
+
+    @override
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, CommandArgument):
+            return False
+
+        return self.__key == other.__key
+
+    @override
+    def __hash__(self) -> int:
+        return hash(self.__key)

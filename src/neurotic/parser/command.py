@@ -1,3 +1,5 @@
+from typing import override
+
 from neurotic.parser.command_argument import CommandArgument
 from neurotic.parser.command_validator import CommandValidator
 from neurotic.parser.main_command import MainCommand
@@ -48,3 +50,14 @@ class Command:
     def __setError(self, error: str):
         self.__has_error = True
         self.__error_msg = error
+
+    @override
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Command):
+            return False
+
+        return self.cmds == other.cmds
+
+    @override
+    def __hash__(self) -> int:
+        return hash(tuple(self.cmds))

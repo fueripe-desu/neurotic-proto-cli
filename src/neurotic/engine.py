@@ -22,6 +22,8 @@ class Engine:
             if prompt_value is None:
                 continue
 
+            print(hash(prompt_value))
+
             # match prompt_value:
             #     case "clear":
             #         _ = subprocess.run(["clear"], shell=True)
