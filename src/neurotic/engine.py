@@ -1,6 +1,7 @@
 import subprocess
 
 from neurotic.logger import Logger
+from neurotic.parser.command import Command
 from neurotic.prompt import Prompt
 
 
@@ -16,15 +17,18 @@ class Engine:
 
     def run(self):
         while not self.__should_close:
-            prompt_value: str = self.__prompt.get_prompt()
+            prompt_value: Command | None = self.__prompt.get_prompt()
 
-            match prompt_value:
-                case "clear":
-                    _ = subprocess.run(["clear"], shell=True)
-                case "quit":
-                    break
-                case _:
-                    self.__logger.error(f"Unknown '{prompt_value}' commmand.")
+            if prompt_value is None:
+                continue
 
-            if prompt_value == "quit":
-                break
+            # match prompt_value:
+            #     case "clear":
+            #         _ = subprocess.run(["clear"], shell=True)
+            #     case "quit":
+            #         break
+            #     case _:
+            #         self.__logger.error(f"Unknown '{prompt_value}' commmand.")
+
+            # if prompt_value == "quit":
+            #     break

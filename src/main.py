@@ -27,7 +27,7 @@ def main():
     con: sqlite3.Connection = sqlite3.connect(f"{path.DATA_DIR_NAME}/neurotic_cli.db")
     logger.info("Connected successfully to the database...")
 
-    engine = Engine(prompt=Prompt(), logger=logger)
+    engine = Engine(prompt=Prompt(logger), logger=logger)
     engine.run()
 
 
