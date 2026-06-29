@@ -1,6 +1,7 @@
 from sys import exit
-import sqlite3
 import argparse
+
+from neurotic.database.database import Database
 from neurotic.handlers.clear_handler import clear_handler
 from neurotic.handlers.quit_handler import quit_handler
 from neurotic.logger import Logger
@@ -32,7 +33,7 @@ def main():
         exit()
 
     logger.debug("Starting database connection...")
-    con: sqlite3.Connection = sqlite3.connect(f"{path.DATA_DIR_NAME}/neurotic_cli.db")
+    db: Database = Database(path)
     logger.info("Connected successfully to the database...")
 
     mapper: Mapper = Mapper()
@@ -47,7 +48,7 @@ def main():
         handler=clear_handler,
     )
 
-    engine = Engine(mapper=mapper, prompt=Prompt(logger), logger=logger)
+    engine = Engine(mapper=mapper, prompt=Prompt(logger), db=db, logger=logger)
     engine.run()
 
 

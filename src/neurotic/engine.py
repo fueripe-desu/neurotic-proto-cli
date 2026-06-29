@@ -1,3 +1,4 @@
+from neurotic.database.database import Database
 from neurotic.logger import Logger
 from neurotic.mapper.mapper import Mapper
 from neurotic.parser.command import Command
@@ -5,9 +6,10 @@ from neurotic.prompt import Prompt
 
 
 class Engine:
-    def __init__(self, mapper: Mapper, prompt: Prompt, logger: Logger):
+    def __init__(self, mapper: Mapper, prompt: Prompt, db: Database, logger: Logger):
         self.__mapper = mapper
         self.__prompt = prompt
+        self.__db = db
         self.__logger = logger
 
         self.__should_close = False
@@ -22,7 +24,7 @@ class Engine:
             if prompt_value is None:
                 continue
 
-            if not self.__mapper.execute(hash(prompt_value)):
+            if not self.__mapper.execute(hash(prompt_value), self.__db):
                 self.__logger.error(
                     f"Unknown '{prompt_value.getMainCommandString()}' commmand."
                 )
