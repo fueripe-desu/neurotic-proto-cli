@@ -24,7 +24,10 @@ class Engine:
             if prompt_value is None:
                 continue
 
-            self.__mapper.execute(hash(prompt_value))
+            if not self.__mapper.execute(hash(prompt_value)):
+                self.__logger.error(
+                    f"Unknown '{prompt_value.getMainCommandString()}' commmand."
+                )
 
             # match prompt_value:
             #     case "clear":

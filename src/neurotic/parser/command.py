@@ -1,4 +1,4 @@
-from typing import override
+from typing import override, cast
 
 from neurotic.parser.command_argument import CommandArgument
 from neurotic.parser.command_validator import CommandValidator
@@ -57,6 +57,12 @@ class Command:
 
     def getErrorMessage(self) -> str:
         return self.__error_msg
+
+    def getMainCommandString(self) -> str:
+        if self.__has_error:
+            return ""
+
+        return cast(MainCommand, self.cmds[0]).getValue()
 
     def __setError(self, error: str):
         self.__has_error = True

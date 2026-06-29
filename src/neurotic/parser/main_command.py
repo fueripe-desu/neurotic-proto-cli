@@ -11,6 +11,9 @@ class MainCommand(CommandValidator):
         if self.__value.startswith("-") or self.__value.endswith("-"):
             return self.setError("Main command must not start or end with dashes.")
 
+    def getValue(self) -> str:
+        return self.__value
+
     @override
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MainCommand):

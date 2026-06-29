@@ -9,5 +9,11 @@ class Mapper:
         print(cmd_map.cmd_hash)
         self.__cmd_map[cmd_map.cmd_hash] = handler
 
-    def execute(self, cmd_hash: int) -> None:
+    def execute(self, cmd_hash: int) -> bool:
+        handler = self.__cmd_map.get(cmd_hash)
+
+        if handler is None:
+            return False
+
         self.__cmd_map[cmd_hash]()
+        return True
