@@ -1,5 +1,3 @@
-import subprocess
-
 from neurotic.logger import Logger
 from neurotic.mapper.mapper import Mapper
 from neurotic.parser.command import Command
@@ -28,14 +26,3 @@ class Engine:
                 self.__logger.error(
                     f"Unknown '{prompt_value.getMainCommandString()}' commmand."
                 )
-
-            # match prompt_value:
-            #     case "clear":
-            #         _ = subprocess.run(["clear"], shell=True)
-            #     case "quit":
-            #         break
-            #     case _:
-            #         self.__logger.error(f"Unknown '{prompt_value}' commmand.")
-
-            # if prompt_value == "quit":
-            #     break

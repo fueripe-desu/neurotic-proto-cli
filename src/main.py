@@ -1,6 +1,8 @@
 from sys import exit
 import sqlite3
 import argparse
+from neurotic.handlers.clear_handler import clear_handler
+from neurotic.handlers.quit_handler import quit_handler
 from neurotic.logger import Logger
 from neurotic.engine import Engine
 from neurotic.mapper.command_map import CommandMap
@@ -36,8 +38,13 @@ def main():
     mapper: Mapper = Mapper()
 
     mapper.register_cmd(
-        cmd_map=CommandMap(["example", "--name"]),
-        handler=example,
+        cmd_map=CommandMap(["quit"]),
+        handler=quit_handler,
+    )
+
+    mapper.register_cmd(
+        cmd_map=CommandMap(["clear"]),
+        handler=clear_handler,
     )
 
     engine = Engine(mapper=mapper, prompt=Prompt(logger), logger=logger)
