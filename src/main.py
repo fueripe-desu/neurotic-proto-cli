@@ -3,8 +3,14 @@ import sqlite3
 import argparse
 from neurotic.logger import Logger
 from neurotic.engine import Engine
+from neurotic.mapper.command_map import CommandMap
+from neurotic.mapper.mapper import Mapper
 from neurotic.prompt import Prompt
 from neurotic.path import Path
+
+
+def example() -> None:
+    print("Example")
 
 
 def main():
@@ -27,7 +33,14 @@ def main():
     con: sqlite3.Connection = sqlite3.connect(f"{path.DATA_DIR_NAME}/neurotic_cli.db")
     logger.info("Connected successfully to the database...")
 
-    engine = Engine(prompt=Prompt(logger), logger=logger)
+    mapper: Mapper = Mapper()
+
+    mapper.register_cmd(
+        cmd_map=CommandMap(["example", "--name"]),
+        handler=example,
+    )
+
+    engine = Engine(mapper=mapper, prompt=Prompt(logger), logger=logger)
     engine.run()
 
 

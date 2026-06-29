@@ -1,12 +1,14 @@
 import subprocess
 
 from neurotic.logger import Logger
+from neurotic.mapper.mapper import Mapper
 from neurotic.parser.command import Command
 from neurotic.prompt import Prompt
 
 
 class Engine:
-    def __init__(self, prompt: Prompt, logger: Logger):
+    def __init__(self, mapper: Mapper, prompt: Prompt, logger: Logger):
+        self.__mapper = mapper
         self.__prompt = prompt
         self.__logger = logger
 
@@ -22,7 +24,7 @@ class Engine:
             if prompt_value is None:
                 continue
 
-            print(hash(prompt_value))
+            self.__mapper.execute(hash(prompt_value))
 
             # match prompt_value:
             #     case "clear":
