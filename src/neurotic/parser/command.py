@@ -71,4 +71,9 @@ class Command:
 
     @override
     def __hash__(self) -> int:
-        return hash(tuple(self.cmds))
+        hash_list: list[int] = []
+
+        for c in self.cmds:
+            hash_list.append(hash(c))
+
+        return hash(str(hash_list))
